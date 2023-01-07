@@ -28,9 +28,9 @@ app.get('/addresses', (req: Request, res:Response) => {
     res.send(addresses)
 })
 app.get('/addresses/:id', (req: Request, res:Response) => {
-    let addresses = products.find(item => item.id === Number(req.params.id))
-    if(addresses){
-        res.send(addresses)
+    let address = addresses.find(item => item.id === Number(req.params.id))
+    if(address){
+        res.send(address)
     } else{
         res.send(404)
     }
