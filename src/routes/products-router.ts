@@ -32,7 +32,7 @@ productsRouter.delete('/:id', (req: Request, res:Response) => {
     }
 
 });
-productsRouter.post('/', (req: Request, res:Response) => {
+productsRouter.post('/', async (req: Request, res:Response) => {
     const newProduct = {
         id: Number(new Date()),
         title: req.body.title
