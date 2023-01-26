@@ -1,4 +1,6 @@
 import Post from "./Post";
+import fileService from "./fileService";
+import {UploadedFile} from "express-fileupload";
 
 type PostType = {
     author: string,
@@ -9,8 +11,9 @@ type PostType = {
 }
 
 class PostService {
-    create(post: PostType) {
-        return Post.create(post)
+    async create(post: PostType, picture:UploadedFile) {
+        const fileName = fileService.saveFile(picture)
+        return await Post.create({...post, picture: fileName})
     }
 
     getAll() {

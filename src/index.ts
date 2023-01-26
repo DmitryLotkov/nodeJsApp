@@ -2,11 +2,13 @@ import express from 'express'
 import {productsRouter} from "./routes/products-router";
 import * as mongoose from "mongoose";
 import router from "./routes/Router";
+import fileUpload from "express-fileupload"
 
 const app = express()
 const port = process.env.PORT || 5000
 const DB_URL = "mongodb+srv://dmitry_lotkov:Sositenogi1@firstapp.opxvirc.mongodb.net/?retryWrites=true&w=majority"
 mongoose.set('strictQuery', true);
+app.use(fileUpload({}))
 app.use(express.urlencoded({extended: true}));
 app.use(express.json())
 app.use("/products", productsRouter)

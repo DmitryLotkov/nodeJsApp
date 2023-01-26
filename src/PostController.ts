@@ -1,10 +1,11 @@
 import {Request, Response} from "express";
 import PostService from "./PostService";
+import {UploadedFile} from "express-fileupload";
 
 class PostController {
     async create(req: Request, res: Response) {
         try {
-            const post = await PostService.create(req.body)
+            const post = await PostService.create(req.body, req.files?.picture as UploadedFile)
             res.status(201).json(post)
         } catch (e) {
             res.status(500).json(e)
