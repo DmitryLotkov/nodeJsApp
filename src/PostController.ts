@@ -1,6 +1,7 @@
 import {Request, Response} from "express";
 import PostService from "./PostService";
 import {UploadedFile} from "express-fileupload";
+import mongoose from "mongoose";
 
 class PostController {
     async create(req: Request, res: Response) {
@@ -21,8 +22,14 @@ class PostController {
     }
     async getOne(req: Request, res: Response) {
         try {
-            const post = await PostService.getOne(req.params.id)
-            return res.json(post)
+            const _id = req.params.id;
+            const isValidId = mongoose.Types.ObjectId.isValid(_id)
+            if (!isValidId) {
+                return res.status(400).send("ID does not exist")
+            } else{
+                const post = await PostService.getOne(_id)
+                return res.json(post)
+            }
         } catch (e:any) {
             res.status(500).json(e.message)
         }
@@ -45,6 +52,7 @@ class PostController {
             res.status(500).json(e)
         }
     }
+
 }
 
 export default new PostController()
