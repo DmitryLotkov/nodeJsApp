@@ -14,7 +14,11 @@ class PostController {
     }
     async getAll(req: Request, res: Response) {
         try {
-            const posts = await PostService.getAll(); //вернет все посты, так как не указали параметры в find
+            const {page} = req.query
+            let pageF = page && +page || 1;
+            const PostsPerPage = 10;
+
+            const posts = await PostService.getAll(pageF, PostsPerPage); //вернет все посты, так как не указали параметры в find
             return res.json(posts)
         } catch (e) {
             res.status(500).json(e)

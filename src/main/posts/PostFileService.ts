@@ -2,7 +2,7 @@ import {UploadedFile} from "express-fileupload";
 import * as uuid from "uuid"
 import path from "path";
 
-class FileService {
+class PostFileService {
     saveFile(file: UploadedFile) {
         try {
             const fileName = uuid.v4() + ".jpg"
@@ -12,9 +12,7 @@ class FileService {
         } catch (e) {
             console.log(e)
         }
-
-
     }
 }
 
-export default new FileService()
+export default new PostFileService();

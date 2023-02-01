@@ -1,13 +1,18 @@
 import Post from "./Post";
-import fileService from "./fileService";
+import fileService from "./PostFileService";
 import {UploadedFile} from "express-fileupload";
+import mongoose from "mongoose";
 
-type PostType = {
-    author: string,
-    title: string,
-    content: string,
-    picture: string
-    _id: string
+export type PostType = {
+    author: string;
+    title: string;
+    content: string;
+    picture: string;
+    _id: mongoose.Types.ObjectId
+    created: Date
+    updated: Date;
+    postCount:number;
+
 }
 
 class PostService {
@@ -16,8 +21,10 @@ class PostService {
         return await Post.create({...post, picture: fileName})
     }
 
-    getAll() {
+    getAll(page: number, PostsPerPage:number) {
         return Post.find()
+            .skip(PostsPerPage * (page - 1))
+            .limit(PostsPerPage)
     }
 
     getOne(id: string) {
@@ -43,3 +50,4 @@ class PostService {
 }
 
 export default new PostService()
+

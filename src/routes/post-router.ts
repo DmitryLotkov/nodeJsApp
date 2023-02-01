@@ -1,5 +1,5 @@
 import {Router} from "express";
-import PostController from "../PostController";
+import PostController from "../main/posts/PostController";
 
 export const postRouter = Router({});
 postRouter.post("/", PostController.create);
