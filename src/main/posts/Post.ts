@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import {PostType} from "./PostService";
+import {PostType} from "../types";
+
 
 const Post = new mongoose.Schema({
     author: {type:String, required: true},

@@ -1,47 +1,43 @@
 import Post from "./Post";
 import fileService from "./PostFileService";
 import {UploadedFile} from "express-fileupload";
-import mongoose from "mongoose";
+import {DataWithPaginationType, PostType} from "../types";
 
-export type PostType = {
-    author: string;
-    title: string;
-    content: string;
-    picture: string;
-    _id: mongoose.Types.ObjectId
-    created: Date
-    updated: Date;
-    postCount:number;
-
-}
 
 class PostService {
-    async create(post: PostType, picture:UploadedFile) {
+    async create(post: PostType, picture:UploadedFile):Promise<PostType> {
         const fileName = fileService.saveFile(picture)
         return await Post.create({...post, picture: fileName})
     }
+    async getAll(page: number, postsPerPage:number): Promise<DataWithPaginationType<PostType>> {
 
-    getAll(page: number, PostsPerPage:number) {
-        return Post.find()
-            .skip(PostsPerPage * (page - 1))
-            .limit(PostsPerPage)
+        const postTotalCount = await Post.countDocuments()
+        const items = await Post.find()
+            .skip(postsPerPage * (page - 1))
+            .limit(postsPerPage)
+        return {
+            items,
+            page,
+            postsPerPage,
+            postTotalCount,
+        }
     }
 
-    getOne(id: string) {
+    async getOne(id: string):Promise<PostType | null> {
         if (!id) {
             throw new Error("Не указан ID")
         }
         return Post.findById(id)
     }
 
-    update(post: PostType) {
+    async update(post: PostType):Promise<PostType | null> {
         if (!post._id) {
             throw  new Error("Не указан ID")
         }
         return Post.findByIdAndUpdate(post._id, post, {new: true})
     }
 
-    delete(id: string) {
+    async delete(id: string):Promise<PostType | null> {
         if (!id) {
             throw  new Error("Не указан ID")
         }
